@@ -43,12 +43,14 @@ const topicImageMap: Record<string, any> = {
 };
 
 export default function DescriptionScreen() {
-  const { topic } = useLocalSearchParams();
-
+  // const { topic } = useLocalSearchParams();
+  const { topic } = useLocalSearchParams() as { topic: keyof typeof storage }; 
   const [activeTopic, setActiveTopic] = useState<iTopic>();
 
   useEffect(() => {
-    setActiveTopic(storage[topic]);
+    if (topic) {
+      setActiveTopic(storage[topic]);
+    }
   }, [topic]);
 
   return (
@@ -65,8 +67,8 @@ export default function DescriptionScreen() {
           <Collapsible key={index} title={el.question}>
             <ThemedText>{el.answer}</ThemedText>
 
-            {el.code &&   <CodeComponent code={el.code} />
-          }
+            {el.code && <CodeComponent code={el.code} />}
+
 
             {el.link && el.link.map((el, index) => el && <ExternalLink key={index} href={el}>
               <ThemedText type="link">Узнать больше #{index + 1}</ThemedText>
