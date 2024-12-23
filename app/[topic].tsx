@@ -17,6 +17,7 @@ import nodejsImage from '@/assets/images/nodejs.png';
 import nosqlImage from '@/assets/images/mongo-db.png';
 import sqlImage from '@/assets/images/sql.png';
 import reactImage from '@/assets/images/react.png';
+import Star from '@/assets/images/starLight';
 
 interface iDescription {
   readonly id: number;
@@ -44,7 +45,7 @@ const topicImageMap: Record<string, any> = {
 
 export default function DescriptionScreen() {
   // const { topic } = useLocalSearchParams();
-  const { topic } = useLocalSearchParams() as { topic: keyof typeof storage }; 
+  const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
   const [activeTopic, setActiveTopic] = useState<iTopic>();
 
   useEffect(() => {
@@ -65,6 +66,8 @@ export default function DescriptionScreen() {
       {activeTopic?.description &&
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
+            <Star />
+
             <ThemedText>{el.answer}</ThemedText>
 
             {el.code && <CodeComponent code={el.code} />}
@@ -73,10 +76,10 @@ export default function DescriptionScreen() {
             {el.link && el.link.map((el, index) => el && <ExternalLink key={index} href={el}>
               <ThemedText type="link">Узнать больше #{index + 1}</ThemedText>
             </ExternalLink>)}
-
           </Collapsible>
         ))}
     </ParallaxScrollView>
+
   );
 }
 
