@@ -1,9 +1,9 @@
-import { Image, ScrollView, StyleSheet, Text } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import storage from '../storage/index.json';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -47,12 +47,23 @@ export default function DescriptionScreen() {
   // const { topic } = useLocalSearchParams();
   const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
   const [activeTopic, setActiveTopic] = useState<iTopic>();
+  const [favorites, setFavorites] = useState<iDescription[]>([]);
 
   useEffect(() => {
     if (topic) {
       setActiveTopic(storage[topic]);
     }
   }, [topic]);
+
+  const toggleFavorite = useCallback((item: iDescription) => {
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.includes(item)) {
+        return prevFavorites.filter(fav => fav !== item)
+      } else {
+        return [...prevFavorites, item]
+      }
+    })
+  }, [])
 
   return (
     <ParallaxScrollView
@@ -66,7 +77,9 @@ export default function DescriptionScreen() {
       {activeTopic?.description &&
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
-            <Star />
+            <TouchableOpacity onPress={() => toggleFavorite(el)}>
+              <Star style={{backgroundColor:favorites.includes(el)?'red':'gray'}}/>
+            </TouchableOpacity>
 
             <ThemedText>{el.answer}</ThemedText>
 
