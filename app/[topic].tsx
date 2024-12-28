@@ -8,43 +8,13 @@ import storage from '../storage/index.json';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import { CodeComponent } from '@/components/CodeComponent';
+import { iDescription, iTopic } from '@/interfaces/index';
 
-import htmlImage from '@/assets/images/html.png';
-import cssImage from '@/assets/images/css.png';
-import javascriptImage from '@/assets/images/javascript.png';
-import typescriptImage from '@/assets/images/typescript.png';
-import nodejsImage from '@/assets/images/nodejs.png';
-import nosqlImage from '@/assets/images/mongo-db.png';
-import sqlImage from '@/assets/images/sql.png';
-import reactImage from '@/assets/images/react.png';
+import topicImageMap from '@/utils/topicImageMap';
 import Star from '@/assets/images/starLight';
-
-interface iDescription {
-  readonly id: number;
-  readonly code: string;
-  readonly link: string[];
-  readonly question: string;
-  readonly answer: string;
-}
-
-interface iTopic {
-  readonly assets: string;
-  readonly description: iDescription[];
-}
-
-const topicImageMap: Record<string, any> = {
-  HTML: htmlImage,
-  CSS: cssImage,
-  JavaScript: javascriptImage,
-  TypeScript: typescriptImage,
-  React: reactImage,
-  SQL: sqlImage,
-  noSQL: nosqlImage,
-  'Node.js': nodejsImage,
-};
+import StarDark from '@/assets/images/starDark';
 
 export default function DescriptionScreen() {
-  // const { topic } = useLocalSearchParams();
   const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
   const [activeTopic, setActiveTopic] = useState<iTopic>();
   const [favorites, setFavorites] = useState<iDescription[]>([]);
@@ -57,11 +27,11 @@ export default function DescriptionScreen() {
 
   const toggleFavorite = useCallback((item: iDescription) => {
     setFavorites((prevFavorites) => {
-      if (prevFavorites.includes(item)) {
-        return prevFavorites.filter(fav => fav !== item)
-      } else {
-        return [...prevFavorites, item]
-      }
+      if (!prevFavorites.includes(item)) {
+        console.log( [...prevFavorites, item]);
+        return [...prevFavorites, item];
+      } 
+      return prevFavorites
     })
   }, [])
 
@@ -77,8 +47,8 @@ export default function DescriptionScreen() {
       {activeTopic?.description &&
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
-            <TouchableOpacity onPress={() => toggleFavorite(el)}>
-              <Star style={{backgroundColor:favorites.includes(el)?'red':'gray'}}/>
+            <TouchableOpacity style={{pointerEvents:'auto'}} onPress={() => toggleFavorite(el)}>
+            {favorites.includes(el) ? <StarDark /> : <Star />}
             </TouchableOpacity>
 
             <ThemedText>{el.answer}</ThemedText>

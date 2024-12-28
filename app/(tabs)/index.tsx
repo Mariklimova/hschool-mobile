@@ -8,7 +8,7 @@ export default function HomeScreen() {
   const topics = ['HTML', 'CSS', 'JavaScript', 'SQL'];
   const router = useRouter()
 
-  const handleTopicPress = (topic: string) => {
+  const handleTopicPress = (topic: any) => {
     router.navigate(topic);
   };
 
@@ -18,7 +18,7 @@ export default function HomeScreen() {
       style={styles.container}
     >
 
-      <Image source={require('@/assets/images/HS.png')} style={{ width: '75%', resizeMode: 'contain', position: 'relative', bottom: '10%' }} />
+      <Image source={require('@/assets/images/HS.png')} style={{ width: '75%', position: 'relative', bottom: '10%' }} resizeMode='contain' />
 
       <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
         <ThemedText type='title'>Выберите тему:</ThemedText>
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     margin: 5,
+    pointerEvents: 'auto', 
   },
 
   reactLogo: {
