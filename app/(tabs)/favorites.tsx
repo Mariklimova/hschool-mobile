@@ -9,7 +9,7 @@ import storage from '@/storage/index.json';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import {iDescription, iTopic} from '@/interfaces/index'
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import topicImageMap from '@/utils/topicImageMap';
 import Star from '@/assets/images/starLight';
@@ -21,22 +21,7 @@ export default function Favorites() {
     const [favorites, setFavorites] = useState<iDescription[]>([]);
     const [activeTopic, setActiveTopic] = useState<iTopic>();
     
-    // useEffect(() => {
-    //     if (topic) {
-    //       setActiveTopic(storage[topic]);
-    //     }
-    //   }, [topic]);
-    
-    //   const toggleFavorite = (item: iDescription) => {
-    //     setFavorites((prevFavorites) => {
-    //         if (prevFavorites.some(fav => fav.id === item.id)) { // Проверяем по id
-    //             return prevFavorites.filter(fav => fav.id !== item.id); // Удаляем из избранного
-    //         } else {
-    //             return [...prevFavorites, item]; // Добавляем в избранное
-    //         }
-    //     });
-    // };
-
+   
     const addToFavorites = useCallback(() => {
         setFavorites((prevFavorites) => {
           // Получаем все элементы из activeTopic
@@ -50,12 +35,7 @@ export default function Favorites() {
               updatedFavorites.push(item);
             }
           });
-      
-          // Добавляем topic, если его еще нет в favorites
-        //   if (!updatedFavorites.some(fav => fav.id === activeTopic?.id)) {
-        //     updatedFavorites.push(activeTopic);
-        //   }
-      
+                   
           return updatedFavorites;
         });
       }, [activeTopic]);

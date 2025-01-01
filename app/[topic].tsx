@@ -9,6 +9,7 @@ import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import { CodeComponent } from '@/components/CodeComponent';
 import { iDescription, iTopic } from '@/interfaces/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import topicImageMap from '@/utils/topicImageMap';
 import Star from '@/assets/images/starLight';
@@ -25,15 +26,20 @@ export default function DescriptionScreen() {
     }
   }, [topic]);
 
-  const toggleFavorite = useCallback((item: iDescription) => {
+  const addToFavorites = useCallback((item: iDescription) => {
     setFavorites((prevFavorites) => {
-      if (!prevFavorites.includes(item)) {
-        console.log( [...prevFavorites, item]);
-        return [...prevFavorites, item];
-      } 
-      return prevFavorites
-    })
-  }, [])
+        // Проверяем, есть ли элемент в favorites
+        const isFavorite = prevFavorites.some(fav => fav.id === item.id);
+        const updatedFavorites = isFavorite
+            ? prevFavorites.filter(fav => fav.id !== item.id) // Удаляем, если уже есть
+            : [...prevFavorites, item]; // Добавляем, если нет
+
+        // Сохраняем обновленные favorites в AsyncStorage
+        AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        return updatedFavorites;
+    });
+}, []);
+
 
   return (
     <ParallaxScrollView
@@ -47,8 +53,8 @@ export default function DescriptionScreen() {
       {activeTopic?.description &&
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
-            <TouchableOpacity style={{pointerEvents:'auto'}} onPress={() => toggleFavorite(el)}>
-            {favorites.includes(el) ? <StarDark /> : <Star />}
+            <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={() => addToFavorites(el)}>
+            {favorites.some(fav => fav.id === el.id) ? <StarDark /> : <Star />}
             </TouchableOpacity>
 
             <ThemedText>{el.answer}</ThemedText>
