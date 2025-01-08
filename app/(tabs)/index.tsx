@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 
 export default function HomeScreen() {
   // const topics = ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'SQL', 'noSQL', 'Node.js'];
-  const topics = ['HTML', 'CSS', 'JavaScript', 'SQL'];
+  const topics = ['HTML', 'CSS', 'JavaScript', 'SQL', 'Node.js'];
   const router = useRouter()
 
   const handleTopicPress = (topic: any) => {
