@@ -3,7 +3,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import storage from '../storage/index.json';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -20,26 +20,27 @@ export default function DescriptionScreen() {
   const [activeTopic, setActiveTopic] = useState<iTopic>();
   const [favorites, setFavorites] = useState<iDescription[]>([]);
 
-  useEffect(() => {
-    if (topic) {
-      setActiveTopic(storage[topic]);
+  const loadLikedQuestions = async () => {
+    const storedLikes = await AsyncStorage.getItem('favoriteQuestions')
+    if (storedLikes) {
+      setFavorites(JSON.parse(storedLikes))
     }
+  }
+
+  const addToFavorites = async (item: iDescription) => {
+    const updatedFavorites = favorites.some(fav => fav.id === item.id)
+      ? favorites.filter(fav => fav.id !== item.id)
+      : [...favorites, item];
+
+    setFavorites(updatedFavorites)
+    await AsyncStorage.setItem('favoriteQuestions', JSON.stringify(updatedFavorites));
+    console.log(updatedFavorites);
+  };
+
+  useEffect(() => {
+    setActiveTopic(storage[topic]);
+    loadLikedQuestions()
   }, [topic]);
-
-  const addToFavorites = useCallback((item: iDescription) => {
-    setFavorites((prevFavorites) => {
-        // Проверяем, есть ли элемент в favorites
-        const isFavorite = prevFavorites.some(fav => fav.id === item.id);
-        const updatedFavorites = isFavorite
-            ? prevFavorites.filter(fav => fav.id !== item.id) // Удаляем, если уже есть
-            : [...prevFavorites, item]; // Добавляем, если нет
-
-        // Сохраняем обновленные favorites в AsyncStorage
-        AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-        return updatedFavorites;
-    });
-}, []);
-
 
   return (
     <ParallaxScrollView
@@ -54,7 +55,7 @@ export default function DescriptionScreen() {
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
             <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={() => addToFavorites(el)}>
-            {favorites.some(fav => fav.id === el.id) ? <StarDark /> : <Star />}
+              {favorites.some(fav => fav.id === el.id) ? <StarDark /> : <Star />}
             </TouchableOpacity>
 
             <ThemedText>{el.answer}</ThemedText>
