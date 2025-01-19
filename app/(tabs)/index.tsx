@@ -2,10 +2,11 @@ import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
+import topicImageMap from '@/utils/topicImageMap';
 
 export default function HomeScreen() {
   // const topics = ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'SQL', 'noSQL', 'Node.js'];
-  const topics = ['HTML', 'CSS', 'JavaScript', 'SQL', 'Node.js', 'React'];
+  const topics = ['HTML', 'CSS', 'JavaScript', 'SQL', 'Node.js', 'React', 'TypeScript'];
   const router = useRouter()
 
   const handleTopicPress = (topic: any) => {
@@ -30,6 +31,7 @@ export default function HomeScreen() {
               style={styles.topicButton}
               onPress={() => handleTopicPress(topic)}
             >
+              <Image source={topicImageMap[topic]} style={styles.topicImage} />
               <ThemedText>{topic}</ThemedText>
             </TouchableOpacity>
           ))}
@@ -55,18 +57,17 @@ const styles = StyleSheet.create({
     zIndex: 100
   },
   topicButton: {
-    backgroundColor: '#f1f1f1',
+    // backgroundColor: '#f1f1f1',
+    backgroundColor: 'transparent',
     borderRadius: 8,
     padding: 10,
     margin: 5,
-    pointerEvents: 'auto', 
+    // pointerEvents: 'auto', 
+    alignItems: 'center',
   },
-
-  reactLogo: {
-    height: 40,
-    width: '70%',
-    position: 'relative',
-    left: '12%',
-    marginBottom: 50
+  topicImage: {
+    width: 70,
+    height: 70,
+    marginBottom: 5,
   },
 });

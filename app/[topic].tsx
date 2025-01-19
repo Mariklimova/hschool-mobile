@@ -12,8 +12,8 @@ import { iDescription, iTopic } from '@/interfaces/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import topicImageMap from '@/utils/topicImageMap';
-import Star from '@/assets/images/starLight';
-import StarDark from '@/assets/images/starDark';
+import Heart from '@/assets/images/heartDislike';
+import HeartDark from '@/assets/images/heartLike';
 
 export default function DescriptionScreen() {
   const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
@@ -55,7 +55,7 @@ export default function DescriptionScreen() {
         activeTopic?.description.map((el, index: number) => (
           <Collapsible key={index} title={el.question}>
             <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={() => addToFavorites(el)}>
-              {favorites.some(fav => fav.id === el.id) ? <StarDark /> : <Star />}
+              {favorites.some(fav => fav.id === el.id) ? <Heart /> : <HeartDark />}
             </TouchableOpacity>
 
             <ThemedText>{el.answer}</ThemedText>

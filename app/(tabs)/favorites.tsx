@@ -12,19 +12,18 @@ import { iDescription, iTopic } from '@/interfaces/index'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import topicImageMap from '@/utils/topicImageMap';
-import Star from '@/assets/images/starLight';
-import StarDark from '@/assets/images/starDark';
+import Heart from '@/assets/images/heartDislike';
+import HeartDark from '@/assets/images/heartLike';
 
 
 export default function Favorites() {
     const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
     const [favorites, setFavorites] = useState<iDescription[]>([]);
-    // const [activeTopic, setActiveTopic] = useState<iTopic>();
 
 
     const addToFavorites = async (item: iDescription) => {
         const updatedFavorites = favorites.some(fav => fav.id === item.id)
-            ? favorites.filter(fav => fav.id === item.id)
+            ? favorites.filter(fav => fav.id !== item.id)
             : [...favorites, item]
         setFavorites(updatedFavorites);
         await AsyncStorage.setItem('favoriteQuestions', JSON.stringify(updatedFavorites))
@@ -59,7 +58,7 @@ export default function Favorites() {
             {favorites.map((el, index: number) => (
                 <Collapsible key={index} title={el.question}>
                     <TouchableOpacity onPress={() => addToFavorites(el)}>
-                        {favorites.some(fav => fav.id === el.id) ? <StarDark /> : <Star />}
+                        {favorites.some(fav => fav.id === el.id) ? <Heart /> : <HeartDark />}
                     </TouchableOpacity>
 
                     <ThemedText>{el.answer}</ThemedText>
