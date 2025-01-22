@@ -587,6 +587,15 @@
                 ],
                 "question": "Какие принципы лежат в основе SOLID?",
                 "answer": "SOLID - это аббревиатура пяти основных принципов проектирования в объектно-ориентированном программировании - Single responsibility, Open-closed, Liskov substitution, Interface segregation и Dependency inversion."
+            },
+            {
+                "id": 41,
+                "code": "",
+                "link": [
+                    ""
+                ],
+                "question": "Что такое конструктор класса в JS?",
+                "answer": "Метод constructor - специальный метод, необходимый для создания и инициализации объектов, созданных с помощью класса."
             }
         ]
     },
