@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -19,6 +19,7 @@ export default function DescriptionScreen() {
   const { topic } = useLocalSearchParams() as { topic: keyof typeof storage };
   const [activeTopic, setActiveTopic] = useState<iTopic>();
   const [favorites, setFavorites] = useState<iDescription[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const loadLikedQuestions = async () => {
     const storedLikes = await AsyncStorage.getItem('favoriteQuestions')
@@ -42,7 +43,12 @@ export default function DescriptionScreen() {
     loadLikedQuestions()
   }, [topic]);
 
+  const filteredDescriptions = activeTopic?.description.filter(el =>
+    el.question.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
+
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#bde1eb', dark: '#473c1d' }}
       headerImage={<Image source={topicImageMap[topic]} style={styles.topicImage} />}
@@ -51,25 +57,29 @@ export default function DescriptionScreen() {
         <ThemedText type="title">{topic}</ThemedText>
       </ThemedView>
 
-      {activeTopic?.description &&
-        activeTopic?.description.map((el, index: number) => (
-          <Collapsible key={index} title={el.question}>
-            <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={() => addToFavorites(el)}>
-              {favorites.some(fav => fav.id === el.id) ? <Heart /> : <HeartDark />}
-            </TouchableOpacity>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Поиск вопроса..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      {filteredDescriptions && filteredDescriptions.map((el, index: number) => (
+        <Collapsible key={index} title={el.question}>
+          <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={() => addToFavorites(el)}>
+            {favorites.some(fav => fav.id === el.id) ? <Heart /> : <HeartDark />}
+          </TouchableOpacity>
 
-            <ThemedText>{el.answer}</ThemedText>
+          <ThemedText>{el.answer}</ThemedText>
 
-            {el.code && <CodeComponent code={el.code} />}
+          {el.code && <CodeComponent code={el.code} />}
 
 
-            {el.link && el.link.map((el, index) => el && <ExternalLink key={index} href={el}>
-              <ThemedText type="link">Узнать больше #{index + 1}</ThemedText>
-            </ExternalLink>)}
-          </Collapsible>
-        ))}
+          {el.link && el.link.map((el, index) => el && <ExternalLink key={index} href={el}>
+            <ThemedText type="link">Узнать больше #{index + 1}</ThemedText>
+          </ExternalLink>)}
+        </Collapsible>
+      ))}
     </ParallaxScrollView>
-
   );
 }
 
@@ -84,5 +94,12 @@ const styles = StyleSheet.create({
     width: 250,
     position: 'absolute',
     left: '20%',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10,
+    paddingHorizontal: 10,
   },
 });

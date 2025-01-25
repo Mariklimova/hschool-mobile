@@ -3,42 +3,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import topicImageMap from '@/utils/topicImageMap';
-import { useState, useEffect } from 'react';
-import storage from '@/storage/index.json';
-import { iDescription, iTopic } from '@/interfaces/index';
 
 export default function HomeScreen() {
   // const topics = ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'SQL', 'noSQL', 'Node.js'];
   const topics = ['HTML', 'CSS', 'JavaScript', 'SQL', 'Node.js', 'React', 'TypeScript', 'noSQL'];
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState(''); // Изменен тип состояния на строку
-  const [matchedQuestions, setMatchedQuestions] = useState<iDescription[]>([]); // Для хранения совпадений
+ 
 
-  const handleTopicPress = (topic: string) => {
+  const handleTopicPress = (topic: any) => {
     router.navigate(topic);
   };
 
-  const handleSearch = () => {
-    const topicData = storage[searchQuery];
-    if (topicData) {
-      const results = topicData.description.filter((el:iDescription) =>
-        el.question.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setMatchedQuestions(results); 
-      if (results.length > 0) {
-        router.navigate(results[0].link[0]);
-      } else {
-        console.log('Нет совпадений'); 
-      }
-    } else {
-      console.log('Нет совпадений2'); 
-    }
-  };
-
-  useEffect(() => {
-   
-    setMatchedQuestions(storage[topics[0]].description); 
-  }, []);
 
   return (
     <LinearGradient
@@ -50,15 +25,6 @@ export default function HomeScreen() {
 
       <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
         <ThemedText type='title'>Выберите тему:</ThemedText>
-
-        
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Поиск вопросов..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSearch}
-        />
 
         <View style={styles.topicList}>
           {topics.map((topic, index) => (
@@ -85,16 +51,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  searchInput: {
-      width: '80%',
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-
-
   topicList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -108,7 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     margin: 5,
-    // pointerEvents: 'auto', 
     alignItems: 'center',
   },
   topicImage: {
