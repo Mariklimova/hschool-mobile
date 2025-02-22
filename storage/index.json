@@ -929,6 +929,24 @@
                 "answer": "1) DDL(Data Definition Language). 2) DML(Data Manipulation Language). 3) DCL(Data Control Language). 4) TCL(Transaction Control Language)."
             },
             {
+                "id": 6,
+                "code": "",
+                "link": [
+                    ""
+                ],
+                "question": "Оператор DDL в SQL. Что входит в DDL",
+                "answer": "DDL - группа операторов, с помощью которых мы определяем структуру базы данных и работаем с объектами этой базы, т.е. создаем, изменяем и удаляем их. В эту группу входят операторы: CREATE - используется для создания таблиц, баз данных.  ALTER - используется для изменения таблиц. DROP - для удаления."
+            },
+            {
+                "id": 7,
+                "code": "",
+                "link": [
+                    ""
+                ],
+                "question": "Оператор DML в SQL. Что входит в DML",
+                "answer": "DML - группа операторов для манипуляции."
+            },
+            {
                 "id": 10,
                 "code": "",
                 "link": [
