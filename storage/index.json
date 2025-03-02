@@ -1006,10 +1006,19 @@
                 "link": [
                     ""
                 ],
-                "question": "?",
-                "answer": "."
+                "question": "Отличие HAVING от WHERE?",
+                "answer": "HAVING используется после группировки и для вычислений агрегатных функций."
             },
             {
+                "id": 15,
+                "code": "",
+                "link": [
+                    ""
+                ],
+                "question": "Отличие GROUP BY от DISTINCT?",
+                "answer": "SELECT DISTINCT направлен на удаление дублей из всего."
+            },
+            { 
                 "id": 7,
                 "code": "",
                 "link": [
