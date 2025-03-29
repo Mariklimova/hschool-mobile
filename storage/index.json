@@ -653,12 +653,12 @@
             },
             {
                 "id": 45,
-                "code": "",
+                "code": "(function ()}\nconsole.log('HSchool company'),\n}())",
                 "link": [
                     ""
                 ],
                 "question": "Что такое IIFE?",
-                "answer": "."
+                "answer": "Immediately Invoked Function Expression - функция, которая выполняется сразу же после того, как она была определена автоматически."
             },
             {
                 "id": 46,
